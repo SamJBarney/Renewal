@@ -126,8 +126,13 @@ function handle_jobs()
 					-- Grab the per-tile propogation chance
 					local propagation_chance = a_type.propagation_chance[surface.get_tile(position[1], position[2]).name]
 
+					-- Make sure we can handle non-vanilla flooring
+					if propagation_chance == nil then
+						propagation_chance = 0.05
+					end
+
 					-- Only propogate when the tile propogation chance has been specified
-					if propagation_chance ~= nil and disabled == false then
+					if disabled == false and propagation_chance > 0 then
 						local prop = {}
 						prop.name = entity.name
 						prop.chance = propagation_chance
@@ -166,3 +171,7 @@ function handle_jobs()
 end
 
 script.on_event(defines.events.on_tick, tick)
+
+script.on_event(defines.events.on_player_joined_game, function(event)
+	math.randomseed(game.tick)
+end)
