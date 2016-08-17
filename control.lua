@@ -124,7 +124,13 @@ function handle_jobs()
 					}
 
 					-- Grab the per-tile propogation chance
-					local propagation_chance = a_type.propagation_chance[surface.get_tile(position[1], position[2]).name]
+					local tile = surface.get_tile(position[1], position[2])
+					local propagation_chance = 0
+
+					-- Make sure that the tile is valid
+					if tile ~= nil and tile.valid == true then
+						propogation_chance = a_type.propagation_chance[tile.name]
+					end
 
 					-- Make sure we can handle non-vanilla flooring
 					if propagation_chance == nil then
